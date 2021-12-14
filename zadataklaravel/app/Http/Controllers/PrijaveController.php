@@ -6,7 +6,8 @@ use App\Models\Prijave;
 use Illuminate\Http\Request;
 use App\Http\Resources\PrijaveResource;
 use App\Http\Resources\PrijaveCollection;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Auth;
 
 class PrijaveController extends Controller
 {
@@ -40,7 +41,26 @@ class PrijaveController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator=Validator::make($request->all(),[
+            'kurs'=>'required|string|max:255',
+            'cena'=>'required|string|max:100',
+            'vrstaprijave_id'=>'required',
+            'profesor_id'=>'required'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $prijava=Prijave::create([
+            'kurs'=>$request->kurs,
+            'cena'=>$request->cena,
+            'vrstaprijave_id'=>$request->vrstaprijave_id,
+            'user_id'=>Auth::user()->id,
+            'profesor_id'=>$request->profesor_id,
+        ]);
+
+        return response()->json(['Prijava je uspešno kreirana.', new PrijaveResource($prijava)]);
     }
 
     /**
@@ -80,7 +100,25 @@ class PrijaveController extends Controller
      */
     public function update(Request $request, Prijave $prijave)
     {
-        //
+        $validator=Validator::make($request->all(),[
+            'kurs'=>'required|string|max:255',
+            'cena'=>'required|string|max:100',
+            'vrstaprijave_id'=>'required',
+            'profesor_id'=>'required'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json($validator->errors());
+        }
+
+        $prijave->kurs=$request->kurs;
+        $prijave->cena=$request->cena;
+        $prijave->vrstaprijave_id=$request->vrstaprijave_id;
+        $prijave->profesor_id=$request->profesor_id;
+
+        $prijave->save();
+
+        return response()->json(['Prijava je uspešno ažurirana.',new PrijaveResource($prijave)]);
     }
 
     /**
@@ -91,6 +129,7 @@ class PrijaveController extends Controller
      */
     public function destroy(Prijave $prijave)
     {
-        //
+        $prijave->delete();
+        return response()->json('Prijava je uspešno obrisana.');
     }
 }
