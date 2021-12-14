@@ -41,6 +41,7 @@ class PrijaveController extends Controller
      */
     public function store(Request $request)
     {
+        //Validator zapravo kreira neki objekat i smesta ga unutar promenljive validator
         $validator=Validator::make($request->all(),[
             'kurs'=>'required|string|max:255',
             'cena'=>'required|string|max:100',
