@@ -12,7 +12,7 @@ class VrstaPrijave extends Model
 
     protected $table = 'vrstaprijave';
     //vrsta prijave this moze da ima vise prijava
-    public function posts() {
+    public function prijave() {
         return $this->hasMany(Prijava::class);
     }
 }
