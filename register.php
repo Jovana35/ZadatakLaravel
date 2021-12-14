@@ -4,7 +4,7 @@ include "user.php";
 
 session_start();
 if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password'])) {
-    $firstname=$_POST['name'];
+    $name=$_POST['name'];
     $email=$_POST['email'];
     $password=$_POST['password'];
 
@@ -12,7 +12,7 @@ if(isset($_POST['name']) && isset($_POST['email']) && isset($_POST['password']))
     $odgovor=User::logIn($korisnik, $conn);    
 
     //jedan red znači jedan korisnik
-    if($odgovor->num_rows==1) {
+    if($odgovor->num_rows!=0) {
         //prima id korisnika koji je ulogovan
         $_SESSION['id']=$korisnik->id;
         header('Location: index.php');
