@@ -59,7 +59,7 @@ Route::group(['middleware'=>['auth:sanctum']], function() {
         return auth()->user();
     });
     Route::resource('prijave',PrijaveController::class)->only(['update','store','destroy']);
-
+    Route::resource('users',UserController::class);
     Route::post('/logout',[AuthController::class,'logout']);
 });
 
