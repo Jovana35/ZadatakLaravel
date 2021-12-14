@@ -47,7 +47,7 @@ class AuthController extends Controller
         //koristicemo klasu Auth koja se koristi za pristup autentifikovanom korisniku
         //kazemo okej proveri da li taj korisnik postoji, ko je taj korisnik
         if(!Auth::attempt($request->only('email','password'))) {
-            return response()->json(['message'=>'Unauthorized'],401);
+            return response()->json(['message'=>'Unauthorized user'],401);
         }
         //vrati mi usera ciji je email zapravo ovaj email koji smo dobili u requestu, a ukoliko ih ima vise, 
         //vrati mi prvog
