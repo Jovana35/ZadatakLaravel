@@ -9,6 +9,14 @@ class Prijave extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'kurs',
+        'cena',
+        'vrstaprijave_id',
+        'profesor_id',
+        'user_id'
+    ]; 
+
     protected $table = 'prijave';
     public function vrstaprijave()
     {
