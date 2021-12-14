@@ -37,21 +37,21 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 //rute za profesore
 //Route::get('profesori',[ProfesorController::class,'index']);
 //Route::get('profesori/{id}',[ProfesorController::class,'show']);
-//Route::resource('profesori',ProfesorController::class);
+Route::resource('profesori',ProfesorController::class);
 
 //rute za vrste prijava
 //Route::get('vrste',[VrstaPrijaveController::class,'index']);
 //Route::get('vrste/{id}',[VrstaPrijaveController::class,'show']);
-//Route::resource('vrste',VrstaPrijaveController::class);
+Route::resource('vrste',VrstaPrijaveController::class);
 
 //ruta za funkciju register
-//Route::post('/register',[AuthController::class, 'register']);
+Route::post('/register',[AuthController::class, 'register']);
 
 //ruta za funkciju login
-//Route::post('/login',[AuthController::class, 'login']);
+Route::post('/login',[AuthController::class, 'login']);
 
 //grupna ruta sluzi da napravi grupaciju ruta i onda mozemo jedno pravilo tj ogranicenje da primenimo na svim tim rutama
-//ovo middleware... znaci da ne mozemo da pristupimo ovim dole rutama ukoliko nismo autorizovani
+//middleware... znaci da ne mozemo da pristupimo rutama ukoliko nismo autorizovani
 //npr ulogovani na stranicu
 //poslednjoj ruti moze da pristupi bilo ko, stoji van grupne rute
 Route::group(['middleware'=>['auth:sanctum']], function() {
@@ -62,5 +62,4 @@ Route::group(['middleware'=>['auth:sanctum']], function() {
     Route::resource('users',UserController::class);
     Route::post('/logout',[AuthController::class,'logout']);
 });
-
 Route::resource('prijave',PrijaveController::class)->only(['index']);
