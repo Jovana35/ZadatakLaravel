@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 
+
 class AuthController extends Controller
 {
     //request prima parametre za registraciju
@@ -19,7 +20,7 @@ class AuthController extends Controller
         $validator=Validator::make($request->all(),[
             'name'=>'required|string|max:255',
             'email'=>'required|string|max:255|email|unique:users',
-            'password'=>'required|string|min:8',
+            'password'=>'required|string|min:6',
         ]);
 
         //Validator zapravo kreira neki objekat i smesta ga unutar promenljive validator
@@ -27,7 +28,7 @@ class AuthController extends Controller
         if($validator->fails()) {
             return response()->json($validator->errors());
         }
-        
+
         //kreira se user i cuva se u bazi i u promenljivoj $user
         $user=User::create([
             'name'=>$request->name,
@@ -37,7 +38,7 @@ class AuthController extends Controller
 
         //kada radimo registraciju moramo da imamo tokene, tj korisnik mora da ima token da bi se posle ulogovao pomocu njega
         $token=$user->createToken('auth_token')->plainTextToken;
-        return response()->json(['data'=>$user,'access_token'=>$token,'token_type'=>'Bearer']);
+        return response()->json(['user'=>$user,'access_token'=>$token,'token_type'=>'Bearer']);
     }
 
     public function login(Request $request)
@@ -50,19 +51,19 @@ class AuthController extends Controller
         }
         //vrati mi usera ciji je email zapravo ovaj email koji smo dobili u requestu, a ukoliko ih ima vise, 
         //vrati mi prvog
-        $user=User::where('email',$request['email'])->firstOrDefault();
+        $user=User::where('email',$request['email'])->firstOrFail();
 
         //registrovali smo se, dobili token, pa smo mogli da se ulogujemo, a sada cemo dobiti novi token i sa njim cemo
         //moci da se krecemo kroz stranicu
         //kreiramo token
         $token=$user->createToken('auth_token')->plainTextToken;
-        return response()->json(['message'=>'Hi ' . $user->name . 'welcome to home.', 'access_token'=>$token, 'token_type'=>'Bearer']);
+        return response()->json(['welcome message'=>'Hi '.$user->name, 'access_token'=>$token, 'token_type'=>'Bearer']);
     }
 
     public function logout() {
         auth()->user()->tokens()->delete();
         return [
-            'message'=>'You have successfully logged out and the token was successfully deleted.'
+            'goodbye message'=>'Uspešno ste se odjavili i token je uspešno obrisan.'
         ];
     }
 }
